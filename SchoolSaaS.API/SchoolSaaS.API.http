@@ -1,0 +1,6 @@
+@SchoolSaaS.API_HostAddress = http://localhost:5187
+
+GET {{SchoolSaaS.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
