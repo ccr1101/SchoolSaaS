@@ -1,8 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using SchoolSaaS.Infrastructure;
 using SchoolSaaS.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddAuthorization();
 
 // Add Services
 builder.Services.AddOpenApi();
@@ -24,6 +28,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseRouting();
+
 app.MapControllers();
 app.MapGet("/test", () => "API Working").WithName("test");
 
