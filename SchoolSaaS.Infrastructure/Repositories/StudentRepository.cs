@@ -14,29 +14,32 @@ public class StudentRepository : IStudentRepository
         _context = context;
     }
 
-    public async Task<User?> GetByEmailAsync(string email) =>
-        await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    public async Task<Student?> GetByIdAsync(Guid id) =>
+        await _context.Students.FindAsync(id);
 
-    public async Task<User?> GetByIdAsync(Guid id) =>
-        await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+    public async Task<IEnumerable<Student>> GetBySchoolIdAsync(Guid schoolId) =>
+        await _context.Students.Where(s => s.SchoolId == schoolId).ToListAsync();
 
-    public async Task AddAsync(User user)
+    public async Task AddAsync(Student student)
     {
-        await _context.Users.AddAsync(user);
+        await _context.Students.AddAsync(student);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task UpdateAsync(Student student)
     {
-        _context.Users.Update(user);
+        _context.Students.Update(student);
         await _context.SaveChangesAsync();
     }
+
     public async Task DeleteAsync(Guid id)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u =>u.Id == id);
-        if (user != null)
+        var students = await _context.Students.FindAsync(id);
+        if (students != null)
         {
-            _context.Users.Remove(user);
+            _context.Students.Remove(students);
             await _context.SaveChangesAsync();
         }
     }
+
+}                                   
