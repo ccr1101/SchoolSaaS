@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+
+# Environment / secrets
+#appsettings.Development.json
+appsettings.Production.json
+
+# Keep appsettings.json but remove connection string from it
+# or use:
+**/appsettings*.json
+!**/appsettings.json

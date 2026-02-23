@@ -1,10 +1,18 @@
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using SchoolSaaS.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Add Services
 builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -13,20 +21,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();  // /openapi/v1.json
     app.MapScalarApiReference();  // Optional UI replacement for Swagger}
-
-    app.UseHttpsRedirection();
-
-    var summaries = new[]
-    {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    app.MapGet("/test", () =>
-    {
-        return ("test");
-    })
-    .WithName("test");
-
-    app.Run();
 }
+
+app.UseHttpsRedirection();
+app.MapControllers();
+app.MapGet("/test", () => "API Working").WithName("test");
+
+app.Run();
+
 
