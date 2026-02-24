@@ -1,5 +1,6 @@
 ﻿using SchoolSaaS.Application.DTOs;
 using SchoolSaaS.Application.Interfaces;
+using SchoolSaaS.Application.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,23 @@ namespace SchoolSaaS.Application.Services;
 
 public class AuthService: IAuthService
 {
-    private readonly AppDbContext _context;
+    private readonly IUserRepository _userRepository;
+    private readonly ISchoolRepository _schoolRepository;
+    private readonly IJwtService _jwtService;
 
-    public AuthService()
+    public AuthService(IUserRepository userRepository, ISchoolRepository schoolRepository, IJwtService jwtService)
     {
-
+        _userRepository = userRepository;
+        _schoolRepository = schoolRepository;
+        _jwtService = jwtService;
     }
-    Task<string> RegistersSchoolAsync(RegisterSchoolRequest request);
+
+    public async Task<string> RegistersSchoolAsync(RegisterSchoolRequest request)
+    {
+        // Check if school name already exists
+        var name = _schoolRepository.GetByNameAsync(request.SchoolName);
+        if(name != null)
+            return
+    }
     Task<string> LoginAsync(LoginRequest request);
 }
